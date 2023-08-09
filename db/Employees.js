@@ -13,7 +13,7 @@ const empSchema = new mongoose.Schema({
     "DOB": String,
     "DOJ": String,
     "Address": String,
-    "Account Number": Number,
+    "Account_Number": Number,
     "Bank": String,
     "IFSC": String
 });
