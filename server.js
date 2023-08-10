@@ -38,8 +38,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/employee", require("./routes/employeeRoutes"));
 app.use("/device/", require("./routes/deviceRoutes"));
 app.use("/attandance", require("./routes/attandanceRoutes"));
-app.use("/signUp", require("./routes/signUpRoute"));
-
+app.use("/signup", require("./routes/signUpRoute"));
+app.use("/login", require("./routes/logInRoute"));
 
 /**
  * @swagger
@@ -661,20 +661,7 @@ app.use("/signUp", require("./routes/signUpRoute"));
  *          404:
  *              description: Error occured
  */
-// app.put("/attandance/:ID", async (req, resp) => {
-//     const attandanceData = await Attandance.updateOne(
-//         {Emp_ID: req.params.ID},
-//         {$set: req.body}
-//     );
-//     if(attandanceData.matchedCount) {
-//         resp.status(200).send(attandanceData);
-//     }
-//     else {
-//         resp.status(404).send({
-//             "result": "Error"
-//         });
-//     }
-// });
+
 
 app.get("/", async (req, resp) => {
     resp.send(`App is running on port ${ port }`);

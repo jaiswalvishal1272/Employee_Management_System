@@ -2,6 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { createEmployee } = require("../controllers/signUpController")
 
-router.route("/", createEmployee);
+router.route("/").post(createEmployee);
 
 module.exports = router;
