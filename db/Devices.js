@@ -11,7 +11,12 @@ const deviceSchema = new mongoose.Schema({
     "Brand_Name": String,
     "Strage": Number,
     "Color": String,
-    "Charger": Boolean
+    "Charger": Boolean,
+    "Charger_Brand": String,
+    "Charger_Serial_Number": String,
+    "Mouse": Boolean,
+    "Mouse_Brand": String,
+    "Mouse_Serial_Number": String
 });
 
 module.exports = mongoose.model("devices", deviceSchema);

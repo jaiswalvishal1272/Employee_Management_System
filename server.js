@@ -35,6 +35,12 @@ app.use(cors());
 app.use(express.json());
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
+app.use("/employee", require("./routes/employeeRoutes"));
+app.use("/device/", require("./routes/deviceRoutes"));
+app.use("/attandance", require("./routes/attandanceRoutes"));
+app.use("/signUp", require("./routes/signUpRoute"));
+
+
 /**
  * @swagger
  * components:
@@ -184,7 +190,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
  *    description: The Attandance managing API
  */
 
-app.use("/employee", require("./routes/employeeRoutes"));
+
 
 /**
  * @swagger
@@ -339,7 +345,7 @@ app.use("/employee", require("./routes/employeeRoutes"));
 
 
 
-app.use("/device/", require("./routes/deviceRoutes"));
+
 
 /**
  * @swagger
@@ -571,7 +577,7 @@ app.use("/device/", require("./routes/deviceRoutes"));
 
 
 
-app.use("/attandance", require("./routes/attandanceRoutes"));
+
 /**
  * @swagger
  * /attandance:
