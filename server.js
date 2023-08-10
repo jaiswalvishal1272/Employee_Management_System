@@ -184,6 +184,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
  *    description: The Attandance managing API
  */
 
+app.use("/employee", require("./routes/employeeRoutes"));
+
 /**
  * @swagger
  * /employee:
@@ -204,18 +206,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
  *                      schema:
  *                          $ref: '#components/schemas/Employee'
  */
-app.post("/employee", async (req, resp) => {
-    console.log(req.body);
-    if(req.body) {
-        let emp = new Employees(req.body);
-        emp = await emp.save();
-        console.log(emp);
-        resp.status(201).send(emp);
-    }
-    else {
-        resp.send({"result": "Please fill all the details."});
-    }
-});
+
 
 /**
  * @swagger
@@ -233,11 +224,7 @@ app.post("/employee", async (req, resp) => {
  *                          items: 
  *                              $ref: '#/components/schemas/Employee'
  */
-app.get("/employee", async (req, resp) => {
-    const employees = await Employees.find();
-    console.log(employees);
-    resp.status(200).send(employees);
-});
+
 
 /**
  * @swagger
@@ -263,21 +250,8 @@ app.get("/employee", async (req, resp) => {
  *          400:
  *              description: No employee found
  */
-app.get("/employee/:key", async(req, resp) => {
-    const employee = await Employees.findOne({
-        $or:
-        [
-            {ID: req.params.key},
-            {Name: req.params.key}
-        ]
-    });
-    if(employee) {
-        resp.status(200).send(employee);
-    }
-    else {
-        resp.status(404).send({"result": "No Record Found"});
-    }
-});
+
+
 
 /**
  * @swagger
@@ -308,15 +282,7 @@ app.get("/employee/:key", async(req, resp) => {
  *          400:
  *              description: No employee found
  */
-app.get("/employee/:key/:value", async(req, resp) => {
-    const employee = await Employees.find({[req.params.key]: req.params.value});
-    if(employee) {
-        resp.status(200).send(employee);
-    }
-    else {
-        resp.status(404).send({"result": "No Record Found"});
-    }
-});
+
 
 /**
  * @swagger
@@ -348,30 +314,7 @@ app.get("/employee/:key/:value", async(req, resp) => {
  *          404:
  *              description: The employee record is not found
  */
-app.put("/employee/:ID", async (req, resp) => {
-    const employee = await Employees.updateOne(
-        { ID: req.params.ID },
-        { $set: req.body }
-    );
-    if(employee.modifiedCount && employee.matchedCount) {
-        resp.status(200).send({
-            "result": "Record Updated Successfully",
-            "Details": employee
-        });
-    }
-    else if(employee.matchedCount) {
-        resp.status(204).send({
-            "result": "Nothing to Update",
-            "Details": employee
-        }); 
-    }
-    else {
-        resp.status(404).send({
-            "result": "No Record found to update",
-            "Details": employee
-        });
-    }
-});
+
 
 /**
  * @swagger
@@ -391,25 +334,12 @@ app.put("/employee/:ID", async (req, resp) => {
  *          404:
  *              description: The employee record is not found
  */
-app.delete("/employee/:ID", async (req, resp) => {
-    const employee = await Employees.deleteOne({ID: req.params.ID});
-    if(employee.deletedCount) {
-        resp.status(200).send({
-            "result": "Record Deleted Successfully.",
-            "Details": employee
-        });
-    }
-    else {
-        resp.status(404).send({
-            "result": "No Record Found.",
-            "Details": employee
-            
-        });
-    }
-});
 
 
 
+
+
+app.use("/device/", require("./routes/deviceRoutes"));
 
 /**
  * @swagger
@@ -432,18 +362,18 @@ app.delete("/employee/:ID", async (req, resp) => {
  *                          $ref: '#components/schemas/Device'
  *        
  */
-app.post("/device", async (req, resp) => {
-    console.log(req.body);
-    if(req.body) {
-        let device = new Devices(req.body);
-        device = await device.save();
-        console.log(device);
-        resp.status(201).send(device);
-    }
-    else {
-        resp.send("Please, Fill the Details.");
-    }
-});
+// app.post("/device", async (req, resp) => {
+//     console.log(req.body);
+//     if(req.body) {
+//         let device = new Devices(req.body);
+//         device = await device.save();
+//         console.log(device);
+//         resp.status(201).send(device);
+//     }
+//     else {
+//         resp.send("Please, Fill the Details.");
+//     }
+// });
 
 /**
  * @swagger
@@ -461,11 +391,11 @@ app.post("/device", async (req, resp) => {
  *                          items:
  *                              $ref: '#components/schemas/Device'
  */
-app.get("/device", async (req, resp) => {
-    const devices = await Devices.find();
-    console.log(devices);
-    resp.status(200).send(devices);
-});
+// app.get("/device", async (req, resp) => {
+//     const devices = await Devices.find();
+//     console.log(devices);
+//     resp.status(200).send(devices);
+// });
 
 /**
  * @swagger
@@ -489,24 +419,24 @@ app.get("/device", async (req, resp) => {
  *                          items:
  *                              $ref: '#components/schemas/Device'
  */
-app.get("/device/:key", async (req, resp) => {
-    const devices = await Devices.find({
-        $or:
-        [
-            {Device_Name: req.params.key},
-            {Type: req.params.key}
-        ]
-    });
-    if(devices) {
-        console.log(devices);
-        resp.status(200).send(devices);
-    }
-    else {
-        resp.send({
-            "result": "No Record Found."
-        });
-    }
-});
+// app.get("/device/:key", async (req, resp) => {
+//     const devices = await Devices.find({
+//         $or:
+//         [
+//             {Device_Name: req.params.key},
+//             {Type: req.params.key}
+//         ]
+//     });
+//     if(devices) {
+//         console.log(devices);
+//         resp.status(200).send(devices);
+//     }
+//     else {
+//         resp.send({
+//             "result": "No Record Found."
+//         });
+//     }
+// });
 
 /**
  * @swagger
@@ -537,17 +467,17 @@ app.get("/device/:key", async (req, resp) => {
  *          404:
  *              description: Device not found
  */
-app.get("/device/:key/:value", async (req, resp) => {
-    const devices = await Devices.find({[req.params.key]: req.params.value});
-    if(devices) {
-        resp.send(devices);
-    }
-    else {
-        resp.send({
-            "result": "No Record Found."
-        });
-    }
-});
+// app.get("/device/:key/:value", async (req, resp) => {
+//     const devices = await Devices.find({[req.params.key]: req.params.value});
+//     if(devices) {
+//         resp.send(devices);
+//     }
+//     else {
+//         resp.send({
+//             "result": "No Record Found."
+//         });
+//     }
+// });
 
 /**
  * @swagger
@@ -579,30 +509,30 @@ app.get("/device/:key/:value", async (req, resp) => {
  *          404:
  *              description: The device is not found
  */
-app.put("/device/:Device_ID", async (req, resp) => {
-    const device = await Devices.updateOne(
-        { Device_ID: req.params.Device_ID },
-        { $set: req.body }
-    );
-    if(device.modifiedCount && device.matchedCount) {
-        resp.status(200).send({
-            "result": "Record has been updated.",
-            "Details": device
-        });
-    }
-    else if(device.matchedCount){
-        resp.status(204).send({
-            "result": "Nothing to Update.",
-            "Details": device
-        });
-    }
-    else {
-        resp.status(404).send({
-            "result": "No Records Found.",
-            "Details": device
-        });
-    }
-});
+// app.put("/device/:Device_ID", async (req, resp) => {
+//     const device = await Devices.updateOne(
+//         { Device_ID: req.params.Device_ID },
+//         { $set: req.body }
+//     );
+//     if(device.modifiedCount && device.matchedCount) {
+//         resp.status(200).send({
+//             "result": "Record has been updated.",
+//             "Details": device
+//         });
+//     }
+//     else if(device.matchedCount){
+//         resp.status(204).send({
+//             "result": "Nothing to Update.",
+//             "Details": device
+//         });
+//     }
+//     else {
+//         resp.status(404).send({
+//             "result": "No Records Found.",
+//             "Details": device
+//         });
+//     }
+// });
 
 /**
  * @swagger
@@ -622,26 +552,26 @@ app.put("/device/:Device_ID", async (req, resp) => {
  *          404:
  *              description: The device has not found
  */
-app.delete("/device/:ID", async (req, resp) => {
-    const device = await Devices.deleteOne({Device_ID: req.params.ID});
-    if(device.deletedCount) {
-        resp.status(200).send({
-            "result": "Record has been deleted.",
-            "Details": device
-        });
-    }
-    else {
-        resp.status(404).send({
-            "result": "No Record Found.",
-            "Details": device
-        });
-    }
-});
+// app.delete("/device/:ID", async (req, resp) => {
+//     const device = await Devices.deleteOne({Device_ID: req.params.ID});
+//     if(device.deletedCount) {
+//         resp.status(200).send({
+//             "result": "Record has been deleted.",
+//             "Details": device
+//         });
+//     }
+//     else {
+//         resp.status(404).send({
+//             "result": "No Record Found.",
+//             "Details": device
+//         });
+//     }
+// });
 
 
 
 
-
+app.use("/attandance", require("./routes/attandanceRoutes"));
 /**
  * @swagger
  * /attandance:
@@ -662,19 +592,19 @@ app.delete("/device/:ID", async (req, resp) => {
  *                      schema:
  *                          $ref: '#components/schemas/Attandance'
  */
-app.post("/attandance", async (req, resp) => {
-    if(req.body) {
-        let attandanceData = new Attandance(req.body);
-        attandanceData = await attandanceData.save();
-        console.log(attandanceData);
-        resp.status(201).send(attandanceData);
-    }
-    else {
-        resp.send({
-            "result": "Please, Fill the complete details."
-        });
-    }
-});
+// app.post("/attandance", async (req, resp) => {
+//     if(req.body) {
+//         let attandanceData = new Attandance(req.body);
+//         attandanceData = await attandanceData.save();
+//         console.log(attandanceData);
+//         resp.status(201).send(attandanceData);
+//     }
+//     else {
+//         resp.send({
+//             "result": "Please, Fill the complete details."
+//         });
+//     }
+// });
 
 /**
  * @swagger
@@ -690,18 +620,30 @@ app.post("/attandance", async (req, resp) => {
  *                      schema:
  *                          $ref: '#components/schemas/Attandance'
  */
-app.get("/attandance", async (req, resp) => {
-    const attandanceData = await Attandance.find();
-    console.log(attandanceData);
-    resp.status(200).send(attandanceData);
-});
+// app.get("/attandance", async (req, resp) => {
+//     const attandanceData = await Attandance.find();
+//     console.log(attandanceData);
+//     resp.status(200).send(attandanceData);
+// });
 
 /**
  * @swagger
- * /attandance:
+ * /attandance/{id}:
  *  put:
  *      summary: Mark the checkout in attandance
  *      tags: [Attandances]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: String
+ *            description: Employee id
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schemas/Attandance'
  *      responses:
  *          200:
  *              description: checkout marked
@@ -713,20 +655,20 @@ app.get("/attandance", async (req, resp) => {
  *          404:
  *              description: Error occured
  */
-app.put("/attandance/:ID", async (req, resp) => {
-    const attandanceData = await Attandance.updateOne(
-        {Emp_ID: req.params.ID},
-        {$set: req.body}
-    );
-    if(attandanceData.matchedCount) {
-        resp.status(200).send(attandanceData);
-    }
-    else {
-        resp.status(404).send({
-            "result": "Error"
-        });
-    }
-});
+// app.put("/attandance/:ID", async (req, resp) => {
+//     const attandanceData = await Attandance.updateOne(
+//         {Emp_ID: req.params.ID},
+//         {$set: req.body}
+//     );
+//     if(attandanceData.matchedCount) {
+//         resp.status(200).send(attandanceData);
+//     }
+//     else {
+//         resp.status(404).send({
+//             "result": "Error"
+//         });
+//     }
+// });
 
 app.get("/", async (req, resp) => {
     resp.send(`App is running on port ${ port }`);
