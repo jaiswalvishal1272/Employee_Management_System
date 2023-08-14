@@ -1,7 +1,9 @@
-require("../db/config");
-const Attandance = require("../db/Attandance");
+const asyncHandler = require('express-async-handler');
+const Attandance = require("../db/models/Attandance");
 
-const attandanceMark = async (req, resp) => {
+// description: To mark the attandance
+// route: POST /attandance
+const attandanceMark = asyncHandler(async (req, resp) => {
     if(req.body) {
         let attandanceData = new Attandance(req.body);
         attandanceData = await attandanceData.save();
@@ -13,15 +15,19 @@ const attandanceMark = async (req, resp) => {
             "result": "Please, Fill the complete details."
         });
     }
-};
+});
 
-const attandanceList = async (req, resp) => {
+// description: To get all attandance
+// route: GET /attandance
+const attandanceList = asyncHandler(async (req, resp) => {
     const attandanceData = await Attandance.find();
     console.log(attandanceData);
     resp.status(200).send(attandanceData);
-};
+});
 
-const checkOut = async (req, resp) => {
+// description: To checkout
+// route: PUT /attandance/:ID
+const checkOut = asyncHandler(async (req, resp) => {
     const attandanceData = await Attandance.updateOne(
         {Emp_ID: req.params.id},
         {$set: req.body}
@@ -30,11 +36,11 @@ const checkOut = async (req, resp) => {
         resp.status(200).send(attandanceData);
     }
     else {
-        resp.status(404).send({
-            "result": "Error"
-        });
+        console.log('Not_Found');
+        resp.status(404);
+        throw new Error("NOT_FOUND");
     }
-};
+});
 
 module.exports = {
     attandanceMark,

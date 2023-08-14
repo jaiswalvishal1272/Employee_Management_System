@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Employees = require("../db/Employees");
+const Employees = require("../db/models/Employees");
 
 const createEmployee = async (req, resp) => {
     if(req.body) {
@@ -9,9 +8,8 @@ const createEmployee = async (req, resp) => {
         resp.status(201).send(emp);
     }
     else {
-        resp.status(500).send({
-            "result": "Internal Server Error"
-        });
+        resp.status(400);
+        throw new Error("VALIDATION_ERROR");
     }
 };
 

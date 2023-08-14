@@ -4,9 +4,7 @@ const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 require("./db/config");
-const Employees = require("./db/Employees");
-const Devices = require("./db/Devices");
-const Attandance = require("./db/Attandance");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -33,6 +31,7 @@ const specs = swaggerJsDoc(options);
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use("/employee", require("./routes/employeeRoutes"));
@@ -40,6 +39,9 @@ app.use("/device/", require("./routes/deviceRoutes"));
 app.use("/attandance", require("./routes/attandanceRoutes"));
 app.use("/signup", require("./routes/signUpRoute"));
 app.use("/login", require("./routes/logInRoute"));
+
+
+app.use(errorHandler);
 
 /**
  * @swagger
@@ -187,8 +189,14 @@ app.use("/login", require("./routes/logInRoute"));
  *  - name: Devices
  *    description: The device managing API
  *  - name: Attandances
- *    description: The Attandance managing API
+ *    description: The attandance managing API
+ *  - name: Log In
+ *    description: The login API
+ *  - name: Sign Up
+ *    description: The Signup API
  */
+
+
 
 
 
@@ -212,7 +220,6 @@ app.use("/login", require("./routes/logInRoute"));
  *                      schema:
  *                          $ref: '#components/schemas/Employee'
  */
-
 
 /**
  * @swagger
@@ -368,18 +375,7 @@ app.use("/login", require("./routes/logInRoute"));
  *                          $ref: '#components/schemas/Device'
  *        
  */
-// app.post("/device", async (req, resp) => {
-//     console.log(req.body);
-//     if(req.body) {
-//         let device = new Devices(req.body);
-//         device = await device.save();
-//         console.log(device);
-//         resp.status(201).send(device);
-//     }
-//     else {
-//         resp.send("Please, Fill the Details.");
-//     }
-// });
+
 
 /**
  * @swagger
@@ -397,11 +393,7 @@ app.use("/login", require("./routes/logInRoute"));
  *                          items:
  *                              $ref: '#components/schemas/Device'
  */
-// app.get("/device", async (req, resp) => {
-//     const devices = await Devices.find();
-//     console.log(devices);
-//     resp.status(200).send(devices);
-// });
+
 
 /**
  * @swagger
@@ -425,24 +417,7 @@ app.use("/login", require("./routes/logInRoute"));
  *                          items:
  *                              $ref: '#components/schemas/Device'
  */
-// app.get("/device/:key", async (req, resp) => {
-//     const devices = await Devices.find({
-//         $or:
-//         [
-//             {Device_Name: req.params.key},
-//             {Type: req.params.key}
-//         ]
-//     });
-//     if(devices) {
-//         console.log(devices);
-//         resp.status(200).send(devices);
-//     }
-//     else {
-//         resp.send({
-//             "result": "No Record Found."
-//         });
-//     }
-// });
+
 
 /**
  * @swagger
@@ -515,30 +490,7 @@ app.use("/login", require("./routes/logInRoute"));
  *          404:
  *              description: The device is not found
  */
-// app.put("/device/:Device_ID", async (req, resp) => {
-//     const device = await Devices.updateOne(
-//         { Device_ID: req.params.Device_ID },
-//         { $set: req.body }
-//     );
-//     if(device.modifiedCount && device.matchedCount) {
-//         resp.status(200).send({
-//             "result": "Record has been updated.",
-//             "Details": device
-//         });
-//     }
-//     else if(device.matchedCount){
-//         resp.status(204).send({
-//             "result": "Nothing to Update.",
-//             "Details": device
-//         });
-//     }
-//     else {
-//         resp.status(404).send({
-//             "result": "No Records Found.",
-//             "Details": device
-//         });
-//     }
-// });
+
 
 /**
  * @swagger
@@ -558,21 +510,7 @@ app.use("/login", require("./routes/logInRoute"));
  *          404:
  *              description: The device has not found
  */
-// app.delete("/device/:ID", async (req, resp) => {
-//     const device = await Devices.deleteOne({Device_ID: req.params.ID});
-//     if(device.deletedCount) {
-//         resp.status(200).send({
-//             "result": "Record has been deleted.",
-//             "Details": device
-//         });
-//     }
-//     else {
-//         resp.status(404).send({
-//             "result": "No Record Found.",
-//             "Details": device
-//         });
-//     }
-// });
+
 
 
 
@@ -598,19 +536,7 @@ app.use("/login", require("./routes/logInRoute"));
  *                      schema:
  *                          $ref: '#components/schemas/Attandance'
  */
-// app.post("/attandance", async (req, resp) => {
-//     if(req.body) {
-//         let attandanceData = new Attandance(req.body);
-//         attandanceData = await attandanceData.save();
-//         console.log(attandanceData);
-//         resp.status(201).send(attandanceData);
-//     }
-//     else {
-//         resp.send({
-//             "result": "Please, Fill the complete details."
-//         });
-//     }
-// });
+
 
 /**
  * @swagger
@@ -626,11 +552,7 @@ app.use("/login", require("./routes/logInRoute"));
  *                      schema:
  *                          $ref: '#components/schemas/Attandance'
  */
-// app.get("/attandance", async (req, resp) => {
-//     const attandanceData = await Attandance.find();
-//     console.log(attandanceData);
-//     resp.status(200).send(attandanceData);
-// });
+
 
 /**
  * @swagger
@@ -661,7 +583,6 @@ app.use("/login", require("./routes/logInRoute"));
  *          404:
  *              description: Error occured
  */
-
 
 app.get("/", async (req, resp) => {
     resp.send(`App is running on port ${ port }`);

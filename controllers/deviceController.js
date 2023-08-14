@@ -1,7 +1,9 @@
-require("../db/config");
-const Devices = require("../db/Devices");
+const asyncHandler = require('express-async-handler');
+const Devices = require("../db/models/Devices");
 
-const createDevice = async (req, resp) => {
+// description: Create new device
+// route: POST /device
+const createDevice = asyncHandler(async (req, resp) => {
     console.log(req.body);
     if(req.body) {
         let device = new Devices(req.body);
@@ -10,17 +12,22 @@ const createDevice = async (req, resp) => {
         resp.status(201).send(device);
     }
     else {
-        resp.send("Please, Fill the Details.");
+        resp.status(400);
+        throw new Error("VALIDATION_ERROR");
     }
-};
+});
 
-const getDevices = async (req, resp) => {
+// description: Get all the devices
+// route: GET /device
+const getDevices = asyncHandler(async (req, resp) => {
     const devices = await Devices.find();
     console.log(devices);
     resp.status(200).send(devices);
-};
+});
 
-const getDevice = async (req, resp) => {
+// description: Get devices by it's name or type
+// route: GET /device/:key
+const getDevice = asyncHandler(async (req, resp) => {
     const devices = await Devices.find({
         $or:
         [
@@ -33,25 +40,25 @@ const getDevice = async (req, resp) => {
         resp.status(200).send(devices);
     }
     else {
-        resp.send({
-            "result": "No Record Found."
-        });
+        console.log('Not_Found');
+        resp.status(404);
+        throw new Error("NOT_FOUND");
     }
-};
+});
 
-const getDeviceByAnyField = async (req, resp) => {
+const getDeviceByAnyField = asyncHandler(async (req, resp) => {
     const devices = await Devices.find({[req.params.key]: req.params.value});
     if(devices) {
         resp.send(devices);
     }
     else {
-        resp.send({
-            "result": "No Record Found."
-        });
+        console.log('Not_Found');
+        resp.status(404);
+        throw new Error("NOT_FOUND");
     }
-};
+});
 
-const updateDevice = async (req, resp) => {
+const updateDevice = asyncHandler(async (req, resp) => {
     const device = await Devices.updateOne(
         { Device_ID: req.params.key },
         { $set: req.body }
@@ -69,14 +76,15 @@ const updateDevice = async (req, resp) => {
         });
     }
     else {
-        resp.status(404).send({
-            "result": "No Records Found.",
-            "Details": device
-        });
+        console.log('Not_Found');
+        resp.status(404);
+        throw new Error("NOT_FOUND");
     }
-};
+});
 
-const removeDevice = async (req, resp) => {
+// desription: Remove device
+// route: DELETE /device/:ID
+const removeDevice = asyncHandler(async (req, resp) => {
     const device = await Devices.deleteOne({Device_ID: req.params.key});
     if(device.deletedCount) {
         resp.status(200).send({
@@ -85,12 +93,11 @@ const removeDevice = async (req, resp) => {
         });
     }
     else {
-        resp.status(404).send({
-            "result": "No Record Found.",
-            "Details": device
-        });
+        console.log('Not_Found');
+        resp.status(404);
+        throw new Error("NOT_FOUND");
     }
-};
+});
 
 module.exports = {
     createDevice,
