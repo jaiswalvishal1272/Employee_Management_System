@@ -31,8 +31,12 @@ const getDevice = asyncHandler(async (req, resp) => {
     const devices = await Devices.find({
         $or:
         [
-            {Device_Name: req.params.key},
-            {Type: req.params.key}
+            {
+                Device_Name: { $regex: req.params.key }
+            },
+            {
+                Type: { $regex: req.params.key}
+            }
         ]
     });
     if(devices) {

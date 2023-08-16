@@ -5,6 +5,7 @@ const empSchema = new mongoose.Schema({
     "Name": String,
     "Designation": String,
     "Employment_Type": String,
+    "Role": String,
     "Personal_Email": String,
     "Official_Email": String,
     "Conatact": Number,
