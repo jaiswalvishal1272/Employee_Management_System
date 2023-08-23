@@ -28,6 +28,14 @@ const errorHandler = (err, req, resp, next) => {
                 stackTrace: err.stack
             });
             break;
+        case constants.FORBIDDEN:
+            resp.json({
+                success: false,
+                title: "Permission Denied",
+                message: err.message,
+                stackTace: err.stack
+            });
+            break;
         // default:
         //     console.log("Something went wrong");
         //     break;

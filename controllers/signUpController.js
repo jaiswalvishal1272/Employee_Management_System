@@ -1,6 +1,7 @@
 const Employees = require("../db/models/Employees");
 
 const createEmployee = async (req, resp) => {
+    console.log(req.body);
     if(req.body) {
         let emp = new Employees(req.body);
         emp = await emp.save();
