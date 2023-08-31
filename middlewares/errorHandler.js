@@ -3,8 +3,8 @@ const errorHandler = (err, req, resp, next) => {
     const statusCode = resp.statusCode ? resp.statusCode : 500;
 
     console.log("Error Handling Middleware");
-    switch (statusCode) {
-        case constants.VALIDATION_ERROR:
+    switch (err.name) {
+        case "ValidationError":
             resp.json({
                 success: false,
                 title: "Validation Failed",

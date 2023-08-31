@@ -3,22 +3,22 @@ const mongoose = require('mongoose');
 const deviceSchema = new mongoose.Schema({
     "Device_ID": {
         type: String,
-        required: true,
-        unique: true
+        required: [true, "Device ID is a required field."],
+        unique: [true, "Device id is a unique field."]
     },
     "Device_Name": {
         type: String,
-        required: true
+        required: [true, "Device Name is a required field."]
     },
     "Emp_ID": String,
     "Type": {
         type: String,
-        require: true
+        require: [true, "Device type is a required field."]
     },
     "Serial_Number": {
         type: String,
-        required: true,
-        unique: true
+        required: [true, "Serial Number is a required field."],
+        unique: [true, "Serial number is a unique field."]
     },
     "RAM": Number,
     "Processor": Number,

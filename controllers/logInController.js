@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const asyncHandler = require('express-async-handler');
 const Employees = require("../db/models/Employees");
 
@@ -5,6 +6,7 @@ const Employees = require("../db/models/Employees");
 // route: POST /login
 const getEmployee = asyncHandler(async (req, resp) => {
     console.log(req.body);
+    const { ID , Password } = req.body;
     if(req.body.ID) {
         const employee = await Employees.findOne(req.body);
         if(employee) {

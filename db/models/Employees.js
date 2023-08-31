@@ -4,7 +4,7 @@ const empSchema = new mongoose.Schema({
     "ID": {
         type: String,
         required: [true, "Employee ID is a required field."],
-        // unique: true
+        unique: true
     },
     "Name": {
         type: String,
@@ -42,9 +42,15 @@ const empSchema = new mongoose.Schema({
     },
     "Conatact": {
         type: Number,
-        // unique: true,
+        unique: true,
         minlength: 10,
         maxlength: 10
+    },
+    "Password": {
+        type: String,
+        required: true,
+        unique: true,
+        minlength: 6
     },
     "Aadhaar": {
         type: Number,
